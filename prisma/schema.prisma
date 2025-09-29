@@ -1,15 +1,64 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-model Usuario {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  email     String   @unique
-  criadoEm  DateTime @default(now())
+model Condominio {
+  id           Int       @id @default(autoincrement())
+  nome         String
+  cnpj         String?
+  logradouro   String?
+  numero       String?
+  complemento  String?
+  bairro       String?
+  estado       String?
+  municipio    String?
+  cep          String?
+  nomeAdm      String?
+  cpfAdm       String?
+  emailAdm     String?
+  celularAdm   String?
+  senhaAdm     String?
+
+  moradores   Morador[]
+
+  @@map("condominio")
+}
+
+model Morador {
+  id             Int       @id @default(autoincrement())
+  nome           String
+  cpf            String?
+  celular        String?
+  email          String?
+  dataNascimento DateTime?
+  unidade        String?
+  ehEntregador   Boolean   @default(false)
+  senha          String?
+
+  condominioId   Int
+  condominio     Condominio @relation(fields: [condominioId], references: [id])
+
+  pedidos       Pedido[]
+
+  @@map("morador")
+}
+
+model Pedido {
+  id              Int      @id @default(autoincrement())
+  plataforma      String?
+  descricao       String?
+  previsaoChegada DateTime?
+  localEntrega    String?
+  status          String?
+
+  moradorId Int
+  morador   Morador @relation(fields: [moradorId], references: [id])
+
+  @@map("pedido")
 }
