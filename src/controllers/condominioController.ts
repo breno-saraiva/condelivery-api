@@ -23,8 +23,40 @@ class CondominioController {
 
   static async cadastrarCondominio(req: Request, res: Response) {
     try {
+      const {
+        bairro,
+        celular_adm,
+        cep,
+        cnpj,
+        complemento,
+        cpf_adm,
+        email_adm,
+        estado,
+        logradouro,
+        municipio,
+        nome,
+        nome_adm,
+        numero,
+        senha_adm,
+      } = req.body;
+
       const novoCondominio = await prisma.condominio.create({
-        data: req.body,
+        data: {
+          bairro,
+          celularAdm: celular_adm,
+          cep,
+          cnpj,
+          complemento,
+          cpfAdm: cpf_adm,
+          emailAdm: email_adm,
+          estado,
+          logradouro,
+          municipio,
+          nome,
+          nomeAdm: nome_adm,
+          numero,
+          senhaAdm: senha_adm,
+        },
       });
 
       res.status(201).json({ condominio: novoCondominio });

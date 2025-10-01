@@ -1,5 +1,5 @@
 import express from 'express';
-import PedidoController from '../controllers/pedidoController.js';
+import PedidoController from '../controllers/pedidoController';
 
 const routes = express.Router();
 

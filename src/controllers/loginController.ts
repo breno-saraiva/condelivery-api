@@ -6,7 +6,9 @@ class LoginController {
     try {
       const { email, senha } = req.body;
 
-      const morador = await prisma.morador.findFirst();
+      const morador = await prisma.morador.findFirst({
+        where: { email: email, senha: senha },
+      });
 
       if (morador) {
         return res.status(200).json({

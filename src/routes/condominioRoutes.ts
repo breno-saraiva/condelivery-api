@@ -1,5 +1,5 @@
 import express from 'express';
-import CondominioController from '../controllers/condominioController.js';
+import CondominioController from '../controllers/condominioController';
 
 const routes = express.Router();
 

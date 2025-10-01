@@ -1,5 +1,6 @@
 import { prisma } from '../prismaClient';
 import { Request, Response } from 'express';
+import { parseDateBR } from '../types/parseDate';
 
 class MoradorController {
   static async listarMoradorPorId(req: Request, res: Response) {
@@ -8,7 +9,6 @@ class MoradorController {
 
       const moradorEncontrado = await prisma.morador.findUnique({
         where: { id },
-        include: { pedidos: true },
       });
 
       if (!moradorEncontrado) {
@@ -29,9 +29,19 @@ class MoradorController {
         return res.status(400).json({ message: 'CondomínioId é obrigatório' });
       }
 
+      const { nome, cpf, celular, email, data_nascimento, unidade, eh_entregador, senha } =
+        req.body;
+
       const novoMorador = await prisma.morador.create({
         data: {
-          ...req.body,
+          nome,
+          cpf,
+          celular,
+          email,
+          dataNascimento: parseDateBR(data_nascimento),
+          unidade,
+          ehEntregador: eh_entregador,
+          senha,
           condominioId,
         },
       });
@@ -42,14 +52,30 @@ class MoradorController {
     }
   }
 
-  // Atualizar morador
   static async atualizarMorador(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
 
+      if (isNaN(id)) {
+        return res.status(400).json({ message: 'ID inválido' });
+      }
+
+      const { nome, cpf, celular, email, data_nascimento, unidade, eh_entregador, senha } =
+        req.body;
+      console.log(data_nascimento);
+
       const moradorAtualizado = await prisma.morador.update({
         where: { id },
-        data: req.body,
+        data: {
+          nome,
+          cpf,
+          celular,
+          email,
+          dataNascimento: data_nascimento ? parseDateBR(data_nascimento) : null,
+          unidade,
+          ehEntregador: eh_entregador,
+          senha,
+        },
       });
 
       res.status(200).json({ message: 'Morador atualizado', morador: moradorAtualizado });
