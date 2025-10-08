@@ -17,7 +17,7 @@ class CondominioController {
 
       res.status(200).json(condominioEncontrado);
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao listar condomínio por id` });
+      res.status(500).json({ message: `${error} - Falha ao listar condomínio por id` });
     }
   }
 
@@ -61,7 +61,7 @@ class CondominioController {
 
       res.status(201).json({ condominio: novoCondominio });
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao cadastrar condomínio` });
+      res.status(500).json({ message: `${error} - Falha ao cadastrar condomínio` });
     }
   }
 
@@ -76,7 +76,7 @@ class CondominioController {
 
       res.status(200).json({ message: 'Condomínio atualizado', condominio: condominioAtualizado });
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao atualizar condomínio` });
+      res.status(500).json({ message: `${error} - Falha ao atualizar condomínio` });
     }
   }
 
@@ -88,7 +88,7 @@ class CondominioController {
 
       res.status(200).json({ message: 'Condomínio excluído' });
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao excluir condomínio` });
+      res.status(500).json({ message: `${error} - Falha ao excluir condomínio` });
     }
   }
 }

@@ -17,7 +17,7 @@ class MoradorController {
 
       res.status(200).json(moradorEncontrado);
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao listar morador por id` });
+      res.status(500).json({ message: `${error} - Falha ao listar morador por id` });
     }
   }
 
@@ -29,8 +29,7 @@ class MoradorController {
         return res.status(400).json({ message: 'CondomínioId é obrigatório' });
       }
 
-      const { nome, cpf, celular, email, data_nascimento, unidade, eh_entregador, senha } =
-        req.body;
+      const { nome, cpf, celular, email, data_nascimento, unidade, ehEntregador, senha } = req.body;
 
       const novoMorador = await prisma.morador.create({
         data: {
@@ -40,7 +39,7 @@ class MoradorController {
           email,
           dataNascimento: parseDateBR(data_nascimento),
           unidade,
-          ehEntregador: eh_entregador,
+          ehEntregador: ehEntregador,
           senha,
           condominioId,
         },
@@ -48,7 +47,7 @@ class MoradorController {
 
       res.status(201).json({ morador: novoMorador });
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao cadastrar morador` });
+      res.status(500).json({ message: `${error} - Falha ao cadastrar morador` });
     }
   }
 
@@ -60,8 +59,7 @@ class MoradorController {
         return res.status(400).json({ message: 'ID inválido' });
       }
 
-      const { nome, cpf, celular, email, data_nascimento, unidade, eh_entregador, senha } =
-        req.body;
+      const { nome, cpf, celular, email, data_nascimento, unidade, ehEntregador, senha } = req.body;
       console.log(data_nascimento);
 
       const moradorAtualizado = await prisma.morador.update({
@@ -73,14 +71,14 @@ class MoradorController {
           email,
           dataNascimento: data_nascimento ? parseDateBR(data_nascimento) : null,
           unidade,
-          ehEntregador: eh_entregador,
+          ehEntregador: ehEntregador,
           senha,
         },
       });
 
       res.status(200).json({ message: 'Morador atualizado', morador: moradorAtualizado });
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao atualizar morador` });
+      res.status(500).json({ message: `${error} - Falha ao atualizar morador` });
     }
   }
 
@@ -92,7 +90,7 @@ class MoradorController {
 
       res.status(200).json({ message: 'Morador excluído' });
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao excluir morador` });
+      res.status(500).json({ message: `${error} - Falha ao excluir morador` });
     }
   }
 }

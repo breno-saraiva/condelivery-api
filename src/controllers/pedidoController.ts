@@ -7,24 +7,27 @@ class PedidoController {
       const pedidosEncontrados = await prisma.pedido.findMany();
       res.status(200).json(pedidosEncontrados);
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao listar pedidos` });
+      res.status(500).json({ message: `${error} - Falha ao listar pedidos` });
     }
   }
 
   static async listarPedidoPorId(req: Request, res: Response) {
     try {
-      const id = Number(req.params.id);
-      const pedidoEncontrado = await prisma.pedido.findUnique({
-        where: { id },
-      });
+      const moradorId = Number(req.params.id);
 
-      if (!pedidoEncontrado) {
-        return res.status(400).json({ message: 'Pedido não encontrado' });
+      if (isNaN(moradorId)) {
+        return res.status(400).json({ message: 'ID inválido' });
       }
 
-      res.status(200).json(pedidoEncontrado);
+      const pedidosEncontrados = await prisma.pedido.findMany({
+        where: { moradorId },
+      });
+
+      return res.status(200).json(pedidosEncontrados);
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao listar pedido por id` });
+      return res.status(500).json({
+        message: `${error} - Falha ao listar pedidos por moradorId`,
+      });
     }
   }
 
@@ -46,7 +49,7 @@ class PedidoController {
 
       res.status(201).json({ pedido: novoPedido });
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao cadastrar pedido` });
+      res.status(500).json({ message: `${error} - Falha ao cadastrar pedido` });
     }
   }
 
@@ -61,7 +64,7 @@ class PedidoController {
 
       res.status(200).json({ message: 'Pedido atualizado', pedido: pedidoAtualizado });
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao atualizar pedido` });
+      res.status(500).json({ message: `${error} - Falha ao atualizar pedido` });
     }
   }
 
@@ -73,7 +76,7 @@ class PedidoController {
 
       res.status(200).json({ message: 'Pedido excluído' });
     } catch (error) {
-      res.status(500).json({ message: `${error.message} - Falha ao excluir pedido` });
+      res.status(500).json({ message: `${error} - Falha ao excluir pedido` });
     }
   }
 }

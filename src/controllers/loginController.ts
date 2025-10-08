@@ -33,7 +33,7 @@ class LoginController {
       return res.status(400).json({ message: 'Usuário e/ou senha inválidos' });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: `${error.message} - Falha ao realizar login` });
+      return res.status(500).json({ message: `${error} - Falha ao realizar login` });
     }
   }
 }
