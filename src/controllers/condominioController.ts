@@ -1,5 +1,6 @@
 import { prisma } from '../prismaClient';
 import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 
 class CondominioController {
   static async listarCondominioPorId(req: Request, res: Response) {
@@ -24,38 +25,48 @@ class CondominioController {
   static async cadastrarCondominio(req: Request, res: Response) {
     try {
       const {
-        bairro,
-        celular_adm,
-        cep,
-        cnpj,
-        complemento,
-        cpf_adm,
-        email_adm,
-        estado,
-        logradouro,
-        municipio,
         nome,
-        nome_adm,
+        cnpj,
+        cep,
+        bairro,
+        logradouro,
         numero,
-        senha_adm,
+        complemento,
+        estado,
+        municipio,
+        nomeAdm,
+        cpfAdm,
+        celularAdm,
+        emailAdm,
+        senhaAdm,
       } = req.body;
+
+      const userAlreadyExist = await prisma.condominio.findUnique({
+        where: { emailAdm: emailAdm },
+      });
+
+      if (userAlreadyExist) {
+        res.status(400).json({ message: 'já existe um usuário com esse email' });
+      }
+
+      const passwordHash = await bcrypt.hash(senhaAdm, 10);
 
       const novoCondominio = await prisma.condominio.create({
         data: {
           bairro,
-          celularAdm: celular_adm,
+          celularAdm: celularAdm,
           cep,
           cnpj,
           complemento,
-          cpfAdm: cpf_adm,
-          emailAdm: email_adm,
+          cpfAdm,
+          emailAdm,
           estado,
           logradouro,
           municipio,
           nome,
-          nomeAdm: nome_adm,
+          nomeAdm,
           numero,
-          senhaAdm: senha_adm,
+          senhaAdm: passwordHash,
         },
       });
 
