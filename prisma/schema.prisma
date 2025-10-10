@@ -11,19 +11,19 @@ generator client {
 model Condominio {
   id           Int       @id @default(autoincrement())
   nome         String
-  cnpj         String?
-  logradouro   String?
-  numero       String?
-  complemento  String?
-  bairro       String?
-  estado       String?
-  municipio    String?
-  cep          String?
-  nomeAdm      String?
-  cpfAdm       String?
-  emailAdm     String?
-  celularAdm   String?
-  senhaAdm     String?
+  cnpj         String @unique
+  logradouro   String
+  numero       String
+  complemento  String
+  bairro       String
+  estado       String
+  municipio    String
+  cep          String
+  nomeAdm      String
+  cpfAdm       String @unique
+  emailAdm     String @unique
+  celularAdm   String
+  senhaAdm     String
 
   moradores   Morador[]
 
@@ -33,13 +33,13 @@ model Condominio {
 model Morador {
   id             Int       @id @default(autoincrement())
   nome           String
-  cpf            String?
-  celular        String?
-  email          String?
-  dataNascimento DateTime?
-  unidade        String?
+  cpf            String
+  celular        String
+  email          String @unique
+  dataNascimento String?
+  unidade        String
   ehEntregador   Boolean   @default(false)
-  senha          String?
+  senha          String
 
   condominioId   Int
   condominio     Condominio @relation(fields: [condominioId], references: [id])
@@ -51,11 +51,11 @@ model Morador {
 
 model Pedido {
   id              Int      @id @default(autoincrement())
-  plataforma      String?
-  descricao       String?
+  plataforma      String
+  descricao       String
   previsaoChegada DateTime?
-  localEntrega    String?
-  status          String?
+  localEntrega    String
+  status          String
 
   moradorId Int
   morador   Morador @relation(fields: [moradorId], references: [id])
