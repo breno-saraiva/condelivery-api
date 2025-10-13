@@ -24,7 +24,7 @@ class LoginController {
             email_usuario: morador.email,
           },
           process.env.JWT_SECRET as string,
-          { expiresIn: '6h' },
+          { expiresIn: '1d' },
         );
 
         return res.status(200).json({
@@ -49,7 +49,7 @@ class LoginController {
             email_usuario: condominio.emailAdm,
           },
           process.env.JWT_SECRET as string,
-          { expiresIn: '6h' },
+          { expiresIn: '1d' },
         );
 
         return res.status(200).json({
