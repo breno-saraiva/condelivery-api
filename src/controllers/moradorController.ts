@@ -1,6 +1,7 @@
 import { prisma } from '../prismaClient';
 import { Request, Response } from 'express';
-import { parseDateBR } from '../types/parseDate';
+// import { parseDateBR } from '../types/parseDate';
+import bcrypt from 'bcrypt';
 
 class MoradorController {
   static async listarMoradorPorId(req: Request, res: Response) {
@@ -29,7 +30,9 @@ class MoradorController {
         return res.status(400).json({ message: 'CondomínioId é obrigatório' });
       }
 
-      const { nome, cpf, celular, email, data_nascimento, unidade, ehEntregador, senha } = req.body;
+      const { nome, cpf, celular, email, dataNascimento, unidade, ehEntregador, senha } = req.body;
+
+      const passwordHash = await bcrypt.hash(senha, 10);
 
       const novoMorador = await prisma.morador.create({
         data: {
@@ -37,15 +40,22 @@ class MoradorController {
           cpf,
           celular,
           email,
-          dataNascimento: parseDateBR(data_nascimento),
+          dataNascimento,
           unidade,
-          ehEntregador: ehEntregador,
-          senha,
+          ehEntregador,
+          senha: passwordHash,
           condominioId,
         },
       });
 
-      res.status(201).json({ morador: novoMorador });
+      res.status(201).json({
+        morador: {
+          nome: novoMorador.nome,
+          email: novoMorador.email,
+          unidade: novoMorador.unidade,
+          ehEntregador: novoMorador.ehEntregador,
+        },
+      });
     } catch (error) {
       res.status(500).json({ message: `${error} - Falha ao cadastrar morador` });
     }
@@ -59,8 +69,7 @@ class MoradorController {
         return res.status(400).json({ message: 'ID inválido' });
       }
 
-      const { nome, cpf, celular, email, data_nascimento, unidade, ehEntregador, senha } = req.body;
-      console.log(data_nascimento);
+      const { nome, cpf, celular, email, dataNascimento, unidade, ehEntregador, senha } = req.body;
 
       const moradorAtualizado = await prisma.morador.update({
         where: { id },
@@ -69,9 +78,9 @@ class MoradorController {
           cpf,
           celular,
           email,
-          dataNascimento: data_nascimento ? parseDateBR(data_nascimento) : null,
+          dataNascimento,
           unidade,
-          ehEntregador: ehEntregador,
+          ehEntregador,
           senha,
         },
       });
