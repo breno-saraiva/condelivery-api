@@ -4,19 +4,19 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
 class MoradorController {
-  static async listarMoradorPorId(req: Request, res: Response) {
+  static async listarMoradores(req: Request, res: Response) {
     try {
-      const id = Number(req.params.id);
+      const condominioId = Number(req.params.id);
 
-      const moradorEncontrado = await prisma.morador.findUnique({
-        where: { id },
+      const moradoresEncontrado = await prisma.morador.findMany({
+        where: { condominioId: Number(condominioId) },
       });
 
-      if (!moradorEncontrado) {
-        return res.status(400).json({ message: 'Morador não encontrado' });
+      if (!moradoresEncontrado) {
+        return res.status(400).json({ message: 'Moradores não encontrado' });
       }
 
-      res.status(200).json(moradorEncontrado);
+      res.status(200).json(moradoresEncontrado);
     } catch (error) {
       res.status(500).json({ message: `${error} - Falha ao listar morador por id` });
     }
