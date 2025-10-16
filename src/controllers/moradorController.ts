@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 class MoradorController {
   static async listarMoradores(req: Request, res: Response) {
     try {
-      const condominioId = Number(req.query.condomioId);
+      const condominioId = Number(req.query.condominioId);
 
       const moradoresEncontrado = await prisma.morador.findMany({
         where: { condominioId: condominioId },
@@ -16,7 +16,19 @@ class MoradorController {
         return res.status(400).json({ message: 'Moradores não encontrado' });
       }
 
-      res.status(200).json(moradoresEncontrado);
+      res.status(200).json(
+        moradoresEncontrado.map((item) => ({
+          condominioId: item.condominioId,
+          id: item.id,
+          nome: item.nome,
+          cpf: item.cpf,
+          celular: item.celular,
+          email: item.email,
+          dataNascimento: item.dataNascimento,
+          unidade: item.unidade,
+          ehEntregador: item.ehEntregador,
+        })),
+      );
     } catch (error) {
       res.status(500).json({ message: `${error} - Falha ao listar morador por id` });
     }
