@@ -6,10 +6,10 @@ import bcrypt from 'bcrypt';
 class MoradorController {
   static async listarMoradores(req: Request, res: Response) {
     try {
-      const condominioId = Number(req.params.id);
+      const condominioId = Number(req.query.condomioId);
 
       const moradoresEncontrado = await prisma.morador.findMany({
-        where: { condominioId: Number(condominioId) },
+        where: { condominioId: condominioId },
       });
 
       if (!moradoresEncontrado) {
