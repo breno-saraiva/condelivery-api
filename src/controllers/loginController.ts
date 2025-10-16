@@ -29,6 +29,9 @@ class LoginController {
 
         return res.status(200).json({
           token,
+          id_usuario: morador.id,
+          tipo_usuario: 'morador',
+          email_usuario: morador.email,
         });
       }
 
@@ -54,6 +57,9 @@ class LoginController {
 
         return res.status(200).json({
           token,
+          id_usuario: condominio.id,
+          tipo_usuario: 'condominio',
+          email_usuario: condominio.emailAdm,
         });
       }
 
